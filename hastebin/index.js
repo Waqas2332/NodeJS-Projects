@@ -48,7 +48,7 @@ app.get("/:id/duplicate", async (req, res) => {
   }
 });
 
-app.listen(3000, function () {
+app.listen(8000, function () {
   mongoose
     .connect(
       "mongodb+srv://wmunir232:wmunir232@task-manager.sf6auvh.mongodb.net/"
