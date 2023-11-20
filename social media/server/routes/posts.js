@@ -1,5 +1,6 @@
 import express from "express";
 import PostSchema from "../models/posts.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -32,8 +33,32 @@ router.post("/newpost", async function (req, res) {
     res.status(400).json({ message: error._message, ok: false });
   }
 });
-router.get("/:id", function (req, res) {
-  console.log(req.params.id);
+router.get("/:postID", async function (req, res) {
+  const id = req.params.postID;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ message: "Post Not Found", ok: false });
+    return;
+  }
+  try {
+    const response = await PostSchema.findById(id);
+    console.log(response);
+  } catch (error) {
+    res.status(500).json({ message: error._message, ok: false });
+  }
+});
+
+router.delete("/:id", async function (req, res) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ message: "Post Not Found", ok: false });
+    return;
+  }
+  try {
+    const response = await PostSchema.findByIdAndDelete(id);
+    console.log(response);
+  } catch (error) {
+    res.status(500).json({ message: error._message, ok: false });
+  }
 });
 
 export default router;
