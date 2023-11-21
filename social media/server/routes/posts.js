@@ -18,8 +18,19 @@ router.get("/", async function (req, res) {
   }
 });
 
-router.get("/post", function (req, res) {
-  res.send("This is single post");
+router.put("/:id", async function (req, res) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ message: "Post Not Found", ok: false });
+    return;
+  }
+  try {
+    const data = req.body;
+    const response = await PostSchema.findByIdAndUpdate(id, data);
+    console.log(response);
+  } catch (error) {
+    res.status(500).json({ message: error._message, ok: false });
+  }
 });
 
 // POST ==> New POST creation
